@@ -1,0 +1,8 @@
+{
+	"name": "noroman/simplerating",
+	"autoload": {
+		"psr-4": {
+			"Noroman\\Simplerating\\": "src/"
+		}
+	}
+}
