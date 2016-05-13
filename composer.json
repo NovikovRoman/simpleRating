@@ -7,6 +7,7 @@
         "php ratings"
     ],
     "homepage": "https://github.com/NovikovRoman/simpleRating",
+    "version": "1.0.0",
     "created": 2016,
     "type": "library",
     "license": "MIT",
@@ -18,8 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.0.0",
-        "simplerating/simpleratinglib": "dev-master"
+        "php": ">=5.0.0"
     },
     "autoload": {
         "psr-4": {
