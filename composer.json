@@ -1,25 +1,39 @@
 {
-	"name": "simplerating/simpleratinglib",
-	"description": "simple accounting of ratings",
-	"keywords": ["ratings", "simple rating", "php ratings"],
-	"homepage": "https://github.com/NovikovRoman/simpleRating",
-	"version": "1.0.0",
-	"created" : 2016,
-	"type": "library",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Novikov Roman",
-			"email": "service.for.roman@gmail.com",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"php": ">=5.0.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"Simplerating\\": "src/"
-		}
-	}
+    "name": "simplerating/simpleratinglib",
+    "description": "simple accounting of ratings",
+    "keywords": [
+        "ratings",
+        "simple rating",
+        "php ratings"
+    ],
+    "homepage": "https://github.com/NovikovRoman/simpleRating",
+    "created": 2016,
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Novikov Roman",
+            "email": "service.for.roman@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Simplerating\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Simplerating\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
 }
