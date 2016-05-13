@@ -6,7 +6,7 @@
  *
  */
 
-namespace Noroman\Simplerating;
+namespace Simplerating;
 
 class SimpleRating
 {

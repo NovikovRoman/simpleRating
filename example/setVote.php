@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Noroman\Simplerating\SimpleRating;
+use Simplerating\SimpleRating;
 
 $productId = 23;
 $sr = new SimpleRating($productId, __DIR__ . '/ratingDB/');
