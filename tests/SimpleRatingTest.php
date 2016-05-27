@@ -47,8 +47,8 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
             throw $e;
         }
         $sr->setVote($score, $userId);
-        self::assertEquals($sr->isVoted($userId), true);
-        self::assertEquals($sr->getRating($userId), $score);
+        $this->assertEquals($sr->isVoted($userId), true);
+        $this->assertEquals($sr->getRating($userId), $score);
     }
 
     /**
@@ -63,7 +63,7 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             throw $e;
         }
-        self::assertEquals($sr->getID(), $productId);
+        $this->assertEquals($sr->getID(), $productId);
     }
 
     /**
@@ -79,7 +79,7 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
             throw $e;
         }
         $sr->setID($productId);
-        self::assertEquals($sr->getID(), $productId);
+        $this->assertEquals($sr->getID(), $productId);
     }
 
     public function votesUsersProvider()
@@ -120,7 +120,7 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             throw $e;
         }
-        self::assertEquals($sr->calc(), $average);
+        $this->assertEquals($sr->calc(), $average);
     }
 
     public function productProvider()
@@ -145,7 +145,7 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
             throw $e;
         }
         foreach (self::$arUsersVotes as $userId => $score) {
-            self::assertTrue($sr->isVoted($userId));
+            $this->assertTrue($sr->isVoted($userId));
         }
     }
 
@@ -162,7 +162,7 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
             throw $e;
         }
         $sr->removeAll();
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }*/
 
     /**
