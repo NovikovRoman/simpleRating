@@ -8,6 +8,8 @@
 
 namespace Simplerating;
 
+use \Exception;
+
 class SimpleRating
 {
     private $folder_rating = '';
@@ -20,14 +22,16 @@ class SimpleRating
      *
      * @param $id (int|string) - id объекта для которого установим оценку
      * @param $folder_rating - путь для хранения рейтингов
+     * @throws Exception
      */
     public function __construct($id, $folder_rating)
     {
         $this->folder_rating = $folder_rating;
-        if (!file_exists($this->folder_rating)) {
-            mkdir($this->folder_rating, 0700, true);
+        if (!@mkdir($this->folder_rating, 0700, true) && !is_dir($this->folder_rating)) {
+            $e = new Exception('method getFilename: Can not create directory ' . $this->folder_for_file);
+            throw $e;
         }
-        $this->folder_rating .= substr($this->folder_rating, -1) == '/' ? '' : '/';
+        $this->folder_rating .= substr($this->folder_rating, -1) === '/' ? '' : '/';
         $this->setID($id);
     }
 
@@ -35,6 +39,7 @@ class SimpleRating
      *
      * @param (int|string) $id - id объекта
      * @return $this
+     * @throws \Exception
      */
     public function setID($id)
     {
@@ -91,11 +96,11 @@ class SimpleRating
 
     /**Поставить оценку объекту
      *
-     * @param int    $rating - число
+     * @param float  $rating - число
      * @param string $userId - id пользователя. По-умолчанию определяется IP
      * @return $this
      */
-    public function setVote($rating = 0, $userId = '')
+    public function setVote($rating = 0.0, $userId = '')
     {
         $rating = (float)$rating;
         $userId = $this->canonicalUserId($userId);
@@ -138,17 +143,35 @@ class SimpleRating
         return 0.0;
     }
 
+    /**Удалить информацию о продукте
+     *
+     * @return $this
+     */
+    public function removeAll()
+    {
+        if (file_exists($this->path_to_file)) {
+            unlink($this->path_to_file);
+            $files = scandir($this->folder_for_file);
+            if (count($files) === 2) {
+                rmdir($this->folder_for_file);
+            }
+        }
+        return $this;
+    }
+
     /**Сгенерировать имя файла для хранения оценок
      *
      * @return $this
+     * @throws Exception
      */
     private function getFilename()
     {
         $this->folder_for_file = $this->folder_rating . substr(md5($this->id), 0, 3) . '/';
-        if (!file_exists($this->folder_for_file)) {
-            mkdir($this->folder_for_file, 0700, true);
+        if (!@mkdir($this->folder_for_file, 0700, true) && !is_dir($this->folder_for_file)) {
+            $e = new Exception('method getFilename: Can not create directory ' . $this->folder_for_file);
+            throw $e;
         }
-        $this->path_to_file = $this->folder_for_file . '/' . $this->id;
+        $this->path_to_file = $this->folder_for_file . $this->id;
         return $this;
     }
 
@@ -159,7 +182,7 @@ class SimpleRating
      */
     private function canonicalUserId($userId)
     {
-        return $userId ? $userId : $this->getIP();
+        return $userId ?: $this->getIP();
     }
 
     /**Получить ip пользователя (xxx.xxx.xxx.xxx)
