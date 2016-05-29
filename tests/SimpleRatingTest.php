@@ -117,6 +117,9 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($sr->calc(), $average);
     }
 
+    /**
+     * @return array
+     */
     public function productProvider()
     {
         $arResult = array();
