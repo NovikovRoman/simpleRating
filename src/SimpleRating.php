@@ -28,7 +28,7 @@ class SimpleRating
     {
         $this->folder_rating = $folder_rating;
         if (!@mkdir($this->folder_rating, 0700, true) && !is_dir($this->folder_rating)) {
-            $e = new Exception('method getFilename: Can not create directory ' . $this->folder_for_file);
+            $e = new Exception('method __construct: Can not create directory ' . $this->folder_for_file);
             throw $e;
         }
         $this->folder_rating .= substr($this->folder_rating, -1) === '/' ? '' : '/';
@@ -44,7 +44,7 @@ class SimpleRating
     public function setID($id)
     {
         $this->id = $id;
-        $this->getFilename();
+        $this->setFilename();
         return $this;
     }
 
@@ -105,9 +105,7 @@ class SimpleRating
         $rating = (float)$rating;
         $userId = $this->canonicalUserId($userId);
         $entity = $userId . '=' . $rating . "\n";
-        $fh = fopen($this->path_to_file, 'a+');
-        fwrite($fh, $entity);
-        fclose($fh);
+        $this->addEntity($entity);
         return $this;
     }
 
@@ -121,9 +119,7 @@ class SimpleRating
         $userId = $this->canonicalUserId($userId);
         $data = file_get_contents($this->path_to_file);
         $data = preg_replace('/^(' . preg_quote($userId) . '=.+?$)/mu', '', $data);
-        $fh = fopen($this->path_to_file, 'w+');
-        fwrite($fh, $data);
-        fclose($fh);
+        $this->update($data);
         return $this;
     }
 
@@ -147,14 +143,14 @@ class SimpleRating
      *
      * @return $this
      */
-    public function removeAll()
+    public function removeAllVotes()
     {
         if (file_exists($this->path_to_file)) {
             unlink($this->path_to_file);
-            $files = scandir($this->folder_for_file);
-            if (count($files) === 2) {
-                rmdir($this->folder_for_file);
-            }
+        }
+        $files = scandir($this->folder_for_file);
+        if (count($files) === 2) {
+            rmdir($this->folder_for_file);
         }
         return $this;
     }
@@ -162,16 +158,52 @@ class SimpleRating
     /**Сгенерировать имя файла для хранения оценок
      *
      * @return $this
-     * @throws Exception
      */
-    private function getFilename()
+    private function setFilename()
     {
         $this->folder_for_file = $this->folder_rating . substr(md5($this->id), 0, 3) . '/';
+        $this->path_to_file = $this->folder_for_file . $this->id;
+        return $this;
+    }
+
+    /**Создать директорию для хранения оценок объекта id
+     *
+     * @return $this
+     * @throws Exception
+     */
+    private function createDir()
+    {
         if (!@mkdir($this->folder_for_file, 0700, true) && !is_dir($this->folder_for_file)) {
-            $e = new Exception('method getFilename: Can not create directory ' . $this->folder_for_file);
+            $e = new Exception('method setFilename: Can not create directory ' . $this->folder_for_file);
             throw $e;
         }
-        $this->path_to_file = $this->folder_for_file . $this->id;
+        return $this;
+    }
+
+    /**Обновить файл с оценками
+     *
+     * @param $data string
+     * @return $this
+     */
+    private function update($data)
+    {
+        $fh = fopen($this->path_to_file, 'w+');
+        fwrite($fh, $data);
+        fclose($fh);
+        return $this;
+    }
+
+    /**Добавить запись в файл с оценками
+     *
+     * @param $entity string
+     * @return $this
+     */
+    private function addEntity($entity)
+    {
+        $this->createDir();
+        $fh = fopen($this->path_to_file, 'a+');
+        fwrite($fh, $entity);
+        fclose($fh);
         return $this;
     }
 

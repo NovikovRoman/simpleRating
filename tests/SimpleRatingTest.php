@@ -26,12 +26,6 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
         10 => 5,
     );
 
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        self::rrmdir(self::$path);
-    }
-
     /**
      * @dataProvider votesUsersProvider
      * @param $productId
@@ -150,20 +144,22 @@ class SimpleRatingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider productProvider
-     * @param $productId
      * @throws Exception
      */
-    /*public function testRemoveAll($productId)
+    public function testRemoveAll()
     {
-        try{
-            $sr = new SimpleRating($productId, self::$path);
-        } catch (Exception $e) {
-            throw $e;
+        foreach (self::$arProductId as $productId) {
+            try {
+                $sr = new SimpleRating($productId, self::$path);
+            } catch (Exception $e) {
+                throw $e;
+            }
+            $sr->removeAllVotes();
         }
-        $sr->removeAll();
-        $this->assertTrue(true);
-    }*/
+
+        $dirs = scandir(self::$path);
+        $this->assertTrue((count($dirs) === 2));
+    }
 
     /**
      * @param $path
