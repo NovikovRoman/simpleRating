@@ -184,11 +184,20 @@ class SimpleRating
      *
      * @param $data string
      * @return $this
+     * @throws Exception
      */
     private function update($data)
     {
-        $fh = fopen($this->path_to_file, 'w+');
-        fwrite($fh, $data);
+        try {
+            $fh = fopen($this->path_to_file, 'wb+');
+        } catch (Exception $e) {
+            $ex = new Exception('File open failed (' . $e->getMessage() . ')');
+            throw $ex;
+        }
+        if (fwrite($fh, $data) === false) {
+            $ex = new Exception('I can not write to the file ' . $this->path_to_file);
+            throw $ex;
+        }
         fclose($fh);
         return $this;
     }
@@ -197,12 +206,21 @@ class SimpleRating
      *
      * @param $entity string
      * @return $this
+     * @throws Exception
      */
     private function addEntity($entity)
     {
         $this->createDir();
-        $fh = fopen($this->path_to_file, 'a+');
-        fwrite($fh, $entity);
+        try {
+            $fh = fopen($this->path_to_file, 'ab+');
+        } catch (Exception $e) {
+            $ex = new Exception('File open failed (' . $e->getMessage() . ')');
+            throw $ex;
+        }
+        if (fwrite($fh, $entity) === false) {
+            $ex = new Exception('I can not write to the file ' . $this->path_to_file);
+            throw $ex;
+        }
         fclose($fh);
         return $this;
     }
