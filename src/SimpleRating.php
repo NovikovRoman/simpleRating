@@ -1,15 +1,14 @@
 <?php
+namespace Simplerating;
+
+use \Exception;
+
 /**
  * Class SimpleRating
  * класс для ведения учета рейтинга объектов (товаров, фото и тп)
  * Пользователи учитываются по IP
  *
  */
-
-namespace Simplerating;
-
-use \Exception;
-
 class SimpleRating
 {
     private $folder_rating = '';
