@@ -27,7 +27,7 @@ class SimpleRating
     {
         $this->folder_rating = $folder_rating;
         if (!@mkdir($this->folder_rating, 0700, true) && !is_dir($this->folder_rating)) {
-            $e = new Exception('method __construct: Can not create directory ' . $this->folder_for_file);
+            $e = new Exception('method __construct: Can not create directory ' . $this->folder_rating);
             throw $e;
         }
         $this->folder_rating .= substr($this->folder_rating, -1) === '/' ? '' : '/';
@@ -95,9 +95,10 @@ class SimpleRating
 
     /**Поставить оценку объекту
      *
-     * @param float  $rating - число
+     * @param float $rating - число
      * @param string $userId - id пользователя. По-умолчанию определяется IP
      * @return $this
+     * @throws Exception
      */
     public function setVote($rating = 0.0, $userId = '')
     {
@@ -112,6 +113,7 @@ class SimpleRating
      *
      * @param string $userId - id пользователя. По-умолчанию определяется IP
      * @return $this
+     * @throws Exception
      */
     public function removeVote($userId = '')
     {
@@ -249,5 +251,3 @@ class SimpleRating
         }
         return $ip;
     }
-
-}
